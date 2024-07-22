@@ -13,28 +13,19 @@ h2{
     letter-spacing: 4px;
     color: teal;
 }
-.Main{
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    background-color: teal;
-    padding-bottom: 3rem;
-}
+
 .Mini-Main{
-    margin-top: 4rem;
-    border: solid rgb(156, 154, 154) 5px;
-    padding: 4rem;
     text-align: center;
-    width: 35%;
-    height: 20rem;
-    margin-left: 23rem;
-    background-color: rgb(156, 154, 154);
+    margin-top: 4rem;
+   
 }
 input{
-    width: 100%;
+    width: 50%;
     height: 3rem;
-    border: none;
+    border: solid rgb(156, 154, 154) 2px;
+    padding-left: 1rem;
 }
+
 
 .login-btn{
     background-color: orangered;
@@ -43,7 +34,6 @@ input{
     border-radius: 3rem;
     margin-top: 2rem;
     border: none;
-    
 }
 
 .signUp{
@@ -58,6 +48,8 @@ input{
 }
 .mini{
     display: flex;
+    justify-content: center;
+    margin-top: 4rem;
 }
 .add{
     background-color: teal;
@@ -65,3 +57,37 @@ input{
     border: none;
     width: 3rem;
 }
+/*styling the input task div*/
+.inputTask{
+    height: 3rem;
+    margin-top: 2rem;
+    padding-left: 2rem;
+    text-align: center;
+    width: 60%;
+    display: flex;
+    justify-content: right;
+    gap: 40%;
+    
+}
+/*styling the div with crud button*/
+
+.delete-btn{
+    background-color: orangered;
+    border: none;
+    color: white;
+    width: 4rem;
+    height: 3.3rem;
+}
+.span-container{
+    display: flex;
+    justify-content: right;
+    
+}
+.button-container{
+    display: flex;
+    gap: 5%;
+}
+span{
+    font-size: 2rem;
+}
+

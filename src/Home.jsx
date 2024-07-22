@@ -5,18 +5,36 @@ import { useState } from "react";
 function Home(props){
     const [list,setList] = useState([])
     const [task,setTask] = useState('')
+    const [searchedItem,setSearchItem ] = useState('')
+    const [edited,setEdited] = useState('')
 
     function HandleInput(event){
        setTask(event.target.value)
+       setSearchItem(event.target.value)
        console.log(task)
        
     }
-    
+    // search function
+    function handleSearch(){
+        //console.log(searchedItem)
+        const searchArray = list.filter(item =>item.includes(searchedItem.toLocaleLowerCase()))
+        setList(searchArray)
+        //console.log(searchArray)
+
+    }
+    // Edit and update funtion😭
+    function handleEdit(newtask,index){
+        const EditedList = [...list];
+        EditedList[index] = newtask;
+        setList(EditedList)
+
+    }
+    //add to list/array function
     function HandleAdd(){
         if (task.trim() !==''){
             setList(list=>[...list,task])
-            setTask('')
-            console.log(list)
+            setTask('');
+           // console.log(list)
         }
     }
     
@@ -25,6 +43,25 @@ function Home(props){
         setList(updatedTasks)
 
     }
+
+    /*lets create priorities*/
+    function moveTaskUp(index){
+        if(index > 0){
+            
+            const MovedUp = [...list];
+            [MovedUp[index],MovedUp[index-1]]=[MovedUp[index-1],MovedUp[index]]
+             setList(MovedUp)
+        }
+    }
+    /*move task down*/
+    function MoveTaskDown(index){
+        if(index < list.length-1){
+            const MovedDown = [...list];
+            [MovedDown[index],MovedDown[index+1]] = [MovedDown[index+1],MovedDown[index]]
+            setList(MovedDown)
+        }
+    } 
+
     
     return(
         <div className="Mini-Main">
@@ -32,16 +69,25 @@ function Home(props){
             <div className="mini">
                 <input type="text" placeholder="Enter a Task" onChange={HandleInput} />
                 <button className="add" onClick={()=>HandleAdd(task)}>Add</button>
+                <button className="delete-btn" onClick={handleSearch}>Search</button>
             </div>
-            <ol>
+            <ul>
             {list.map((newTask,index)=>
                 <li key={index}>
-                    <span>{newTask}</span>
-                    <button className="delete-btn" onClick={()=>handleDelete(index)}>delete</button>
+                    <div className="inputTask">
+                        <div className="span-container"><span >{newTask}</span></div>
+                        <div className="button-container">
+                            <button className="add"  onClick={()=>handleDelete(index)}>delete</button>
+                            <button className="add" style={{backgroundColor:'orangered'}} onClick={()=>moveTaskUp(index)}>⬆</button>
+                            <button className="add" onClick={()=>MoveTaskDown(index)}>⬇</button>
+                            <button className="add" onClick={()=>handleEdit(task,index)}>Edit</button>
+                        </div>
+                    </div>
+                    
                 </li>
             
             )}
-            </ol>
+            </ul>
         </div>
     );
 }
