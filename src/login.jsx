@@ -7,7 +7,11 @@ function LogIn(){
     
     const [email,setEmail] = useState('')
     const [password, setPassword]= useState('')
+    const [isactive,setActive] = useState(false)
     const [errors,setErrors] = useState({email:email,password:password})
+    const errorSpan = {
+        borderColor: isactive?'red':''
+    }
 
     function handleUserEmail(event){
         setEmail(event.target.value)
@@ -24,6 +28,7 @@ function LogIn(){
         e.preventDefault()
         if (!email.includes('@')){
             setErrors({...errors,email:'email must include @'})
+            setActive(true)
         }
         console.log(errors)
     }
@@ -35,7 +40,7 @@ function LogIn(){
             
                 <form action="" onSubmit={handleFormSubmit}>
                     <br /><br />
-                    <input type="email" placeholder="Enter Email" onChange={handleUserEmail} /><br /><br />
+                    <input type="email" placeholder="Enter Email" style={errorSpan} /><br /><br />
 
                     <br /><br />
                     <input type="text" placeholder="Enter Password" onChange={handleUserPassword} />

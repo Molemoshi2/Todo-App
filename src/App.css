@@ -87,7 +87,10 @@ input{
     display: flex;
     gap: 5%;
 }
-span{
+.TaskDisplay{
     font-size: 2rem;
+    width: 10rem;
+    border: solid black 2px;
 }
 
+/* styling span showing errors*/

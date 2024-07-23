@@ -1,12 +1,21 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import { json } from "react-router-dom";
 
 
 
 function Home(props){
     const [list,setList] = useState([])
+    //const [newARR,setNewARR] = useState(null)
     const [task,setTask] = useState('')
     const [searchedItem,setSearchItem ] = useState('')
     const [edited,setEdited] = useState('')
+    
+    //using use effect
+    useEffect(
+        ()=>{
+            setList(JSON.parse(localStorage.getItem('NewTask')))
+        }, []
+    )
 
     function HandleInput(event){
        setTask(event.target.value)
@@ -31,9 +40,15 @@ function Home(props){
     }
     //add to list/array function
     function HandleAdd(){
+        let newArr;
+
         if (task.trim() !==''){
-            setList(list=>[...list,task])
+            newArr = [...list,task]
+            // setList(list=>[...list,task])
             setTask('');
+            setList(newArr);
+
+            localStorage.setItem('NewTask', JSON.stringify(newArr))
            // console.log(list)
         }
     }
@@ -67,7 +82,7 @@ function Home(props){
         <div className="Mini-Main">
             <h2>Please Enter A Task</h2>
             <div className="mini">
-                <input type="text" placeholder="Enter a Task" onChange={HandleInput} />
+                <input type="text"  placeholder="Enter a Task" onChange={HandleInput} />
                 <button className="add" onClick={()=>HandleAdd(task)}>Add</button>
                 <button className="delete-btn" onClick={handleSearch}>Search</button>
             </div>
@@ -75,7 +90,7 @@ function Home(props){
             {list.map((newTask,index)=>
                 <li key={index}>
                     <div className="inputTask">
-                        <div className="span-container"><span >{newTask}</span></div>
+                        <div className="span-container"><span className="TaskDisplay" >{newTask}</span></div>
                         <div className="button-container">
                             <button className="add"  onClick={()=>handleDelete(index)}>delete</button>
                             <button className="add" style={{backgroundColor:'orangered'}} onClick={()=>moveTaskUp(index)}>⬆</button>
