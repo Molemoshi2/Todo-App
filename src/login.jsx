@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 
 
@@ -7,12 +7,20 @@ function LogIn(){
     
     const [email,setEmail] = useState('')
     const [password, setPassword]= useState('')
+    const [users,setUsers] = useState([])
     const [isactive,setActive] = useState(false)
     const [errors,setErrors] = useState({email:email,password:password})
     const errorSpan = {
         borderColor: isactive?'red':''
     }
+    // use effect
+    useEffect(
+        ()=>{
+            setUsers(JSON.parse(localStorage.getItem('Users')))
+        },[]
+    )
 
+    //get email
     function handleUserEmail(event){
         setEmail(event.target.value)
         
@@ -30,7 +38,9 @@ function LogIn(){
             setErrors({...errors,email:'email must include @'})
             setActive(true)
         }
-        console.log(errors)
+        else if(email!==users.email && password!==users.password){
+            alert('failed')
+        }
     }
     return(
         <div className="Main">
@@ -40,7 +50,7 @@ function LogIn(){
             
                 <form action="" onSubmit={handleFormSubmit}>
                     <br /><br />
-                    <input type="email" placeholder="Enter Email" style={errorSpan} /><br /><br />
+                    <input type="email"  required placeholder="Enter Email" style={errorSpan} onChange={handleUserEmail} /><br /><br />
 
                     <br /><br />
                     <input type="text" placeholder="Enter Password" onChange={handleUserPassword} />
