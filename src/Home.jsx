@@ -3,19 +3,20 @@ import { json } from "react-router-dom";
 
 
 
-function Home(props){
-    const [list,setList] = useState([])
+function Home(){
+    const [list,setList] = useState(()=>{
+        const tasks = localStorage.getItem('NewTask')
+        if (tasks){
+            console.log('here')
+            return JSON.parse(tasks)
+        }
+        else return []
+    })
     //const [newARR,setNewARR] = useState(null)
     const [task,setTask] = useState('')
     const [searchedItem,setSearchItem ] = useState('')
     const [edited,setEdited] = useState('')
     
-    //using use effect
-    useEffect(
-        ()=>{
-            setList(JSON.parse(localStorage.getItem('NewTask')))
-        }, []
-    )
 
     function HandleInput(event){
        setTask(event.target.value)
@@ -40,16 +41,13 @@ function Home(props){
     }
     //add to list/array function
     function HandleAdd(){
-        let newArr;
+        
 
         if (task.trim() !==''){
-            newArr = [...list,task]
-            // setList(list=>[...list,task])
-            setTask('');
-            setList(newArr);
+            setList((list)=>[...list,task]);
+            console.log(list)
 
-            localStorage.setItem('NewTask', JSON.stringify(newArr))
-           // console.log(list)
+            localStorage.setItem('NewTask', JSON.stringify(list))
         }
     }
     
@@ -87,8 +85,8 @@ function Home(props){
                 <button className="delete-btn" onClick={handleSearch}>Search</button>
             </div>
             <ul>
-            {list.map((newTask,index)=>
-                <li key={index}>
+            {list?.map((newTask,index)=>{
+                return( <li key={index}>
                     <div className="inputTask">
                         <div className="span-container"><span className="TaskDisplay" >{newTask}</span></div>
                         <div className="button-container">
@@ -99,7 +97,7 @@ function Home(props){
                         </div>
                     </div>
                     
-                </li>
+                </li>)}
             
             )}
             </ul>

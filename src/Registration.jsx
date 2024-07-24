@@ -1,15 +1,22 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
 
 
 function Register(){
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
     const [newPassword,setNewPassword] = useState('')
-    const [users,setUsers] = useState([])
-    const [isactive,setActive] = useState(false)
-    const [errors,setErrors] = useState({email:email,password:password})
 
+    // initialize the list
+    const [users,setUsers] = useState(()=>{
+        const Myusers = localStorage.getItem('User')
+        if (Myusers){
+            console.log('here')
+            return JSON.parse(Myusers)
+        }
+        else return []
+    })
+    
+    const [isactive,setActive] = useState(false)
 
     //span and div error style
     const errorSpan = {
@@ -19,12 +26,6 @@ function Register(){
         diplay:isactive?'block':'none',
         color:isactive?'red':'white'
     }
-
-    useEffect(
-        ()=>{
-            setUsers(JSON.parse(localStorage.getItem('Users')))
-        },[]
-    )
 
     // get email
     function handleChangeEmail(event){
@@ -45,20 +46,22 @@ function Register(){
     }
     // handle button click
     function handleButtonClick(event){
-        event.preventDefault()
+        
         //lets try form validation
         if (!email.includes('@') && email.trim()==''){
             setActive(true)
-            
+            event.preventDefault()
          }
         else if(password.length<6 && password.trim()=='' ){
             setActive(true)
+            event.preventDefault()
         }
         else if(newPassword!==password){
             setActive(true)
+            event.preventDefault()
         }
         else{
-            const newusers = [(users)=>[...users,{email:email,password:password}]];
+            const newusers = [...users,{email:email,password:password}];
             localStorage.setItem('Users',JSON.stringify(newusers));
             alert('success')
         }

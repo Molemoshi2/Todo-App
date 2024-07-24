@@ -7,18 +7,24 @@ function LogIn(){
     
     const [email,setEmail] = useState('')
     const [password, setPassword]= useState('')
-    const [users,setUsers] = useState([])
+    const [users,setUsers] = useState(()=>
+        {
+        const Myusers = localStorage.getItem('User')
+        if (Myusers){
+            console.log('here')
+            return JSON.parse(Myusers)
+        }
+        else return []
+    })
     const [isactive,setActive] = useState(false)
     const [errors,setErrors] = useState({email:email,password:password})
     const errorSpan = {
         borderColor: isactive?'red':''
     }
-    // use effect
-    useEffect(
-        ()=>{
-            setUsers(JSON.parse(localStorage.getItem('Users')))
-        },[]
-    )
+    const errormsg = {
+        diplay:isactive?'block':'none',
+        color:isactive?'red':'white'
+    }
 
     //get email
     function handleUserEmail(event){
@@ -32,14 +38,19 @@ function LogIn(){
     }
 
     function handleFormSubmit(e){
-
-        e.preventDefault()
+        let index = 0;
         if (!email.includes('@')){
+            e.preventDefault()
             setErrors({...errors,email:'email must include @'})
             setActive(true)
         }
-        else if(email!==users.email && password!==users.password){
+        else if(email!==users[index].email && password!==users[index].password){
+            e.preventDefault()
+            console.log(email)
             alert('failed')
+        }
+        else{
+            alert('success')
         }
     }
     return(
@@ -48,12 +59,12 @@ function LogIn(){
         <div className="Mini-Main" >
             <h2>login to continue</h2>
             
-                <form action="" onSubmit={handleFormSubmit}>
+                <form action="" >
                     <br /><br />
                     <input type="email"  required placeholder="Enter Email" style={errorSpan} onChange={handleUserEmail} /><br /><br />
 
-                    <br /><br />
-                    <input type="text" placeholder="Enter Password" onChange={handleUserPassword} />
+                    <br /><span style={errormsg}>invalid email</span><br />
+                    <input type="password" placeholder="Enter Password" onChange={handleUserPassword} />
 
                     <Link to={'/Home'} className="login-link" onClick={handleFormSubmit}><button type="submit" className="login-btn" >login</button></Link>
                     <div className="signUp">
