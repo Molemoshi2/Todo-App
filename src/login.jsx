@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState,useEffect } from "react";
+import { useState} from "react";
 
 
 
@@ -9,7 +9,7 @@ function LogIn(){
     const [password, setPassword]= useState('')
     const [users,setUsers] = useState(()=>
         {
-        const Myusers = localStorage.getItem('User')
+        const Myusers = localStorage.getItem('Users')
         if (Myusers){
             console.log('here')
             return JSON.parse(Myusers)
@@ -38,16 +38,20 @@ function LogIn(){
     }
 
     function handleFormSubmit(e){
-        let index = 0;
+        
         if (!email.includes('@')){
             e.preventDefault()
             setErrors({...errors,email:'email must include @'})
             setActive(true)
         }
-        else if(email!==users[index].email && password!==users[index].password){
+        else if(email.trim()=='' && password.trim()==''){
+            setErrors({...errors,email:'cannot be empty'})
+        }
+        else if((email!==users[0].email && password!==users[0])){
             e.preventDefault()
-            console.log(email)
-            alert('failed')
+            setActive(true)
+            setErrors({...errors,email:'user doesn\'t exist '})
+        
         }
         else{
             alert('success')
@@ -61,10 +65,12 @@ function LogIn(){
             
                 <form action="" >
                     <br /><br />
-                    <input type="email"  required placeholder="Enter Email" style={errorSpan} onChange={handleUserEmail} /><br /><br />
+                    <input type="email"  required placeholder="Enter Email" style={errorSpan} onChange={handleUserEmail} />
+                    <br /><span style={errormsg}>{errors.email}</span><br />
 
-                    <br /><span style={errormsg}>invalid email</span><br />
-                    <input type="password" placeholder="Enter Password" onChange={handleUserPassword} />
+                    <br /><br />
+                    <input style={errorSpan} type="password" placeholder="Enter Password" onChange={handleUserPassword} /><br />
+                    <span style={errormsg}>{errors.email}</span><br />
 
                     <Link to={'/Home'} className="login-link" onClick={handleFormSubmit}><button type="submit" className="login-btn" >login</button></Link>
                     <div className="signUp">

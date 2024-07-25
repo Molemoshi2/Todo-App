@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState} from "react";
 import { json } from "react-router-dom";
 
 
@@ -15,7 +15,11 @@ function Home(){
     //const [newARR,setNewARR] = useState(null)
     const [task,setTask] = useState('')
     const [searchedItem,setSearchItem ] = useState('')
-    const [edited,setEdited] = useState('')
+    const [isEditing, setEdited] = useState({"id": 0, "editing":false} )
+
+    const lstyle = {
+        backgroundColor:'orangered'
+    }
     
 
     function HandleInput(event){
@@ -25,11 +29,11 @@ function Home(){
        
     }
     // search function
-    function handleSearch(){
+    function handleSearch(searchedItem){
         //console.log(searchedItem)
         const searchArray = list.filter(item =>item.includes(searchedItem.toLocaleLowerCase()))
         setList(searchArray)
-        //console.log(searchArray)
+        console.log(list)
 
     }
     // Edit and update funtion😭
@@ -37,12 +41,11 @@ function Home(){
         const EditedList = [...list];
         EditedList[index] = newtask;
         setList(EditedList)
+        setEdited({id:index,editing:true});
 
     }
     //add to list/array function
     function HandleAdd(){
-        
-
         if (task.trim() !==''){
             setList((list)=>[...list,task]);
             console.log(list)
@@ -52,7 +55,7 @@ function Home(){
     }
     
     function handleDelete(index){
-        const updatedTasks = list.filter((element,i)=>i!==index)
+        const updatedTasks = list.filter((_,i)=>i!==index)
         setList(updatedTasks)
 
     }
@@ -82,7 +85,7 @@ function Home(){
             <div className="mini">
                 <input type="text"  placeholder="Enter a Task" onChange={HandleInput} />
                 <button className="add" onClick={()=>HandleAdd(task)}>Add</button>
-                <button className="delete-btn" onClick={handleSearch}>Search</button>
+                <button className="delete-btn" onClick={()=>handleSearch(searchedItem)}>Search</button>
             </div>
             <ul>
             {list?.map((newTask,index)=>{
@@ -91,9 +94,9 @@ function Home(){
                         <div className="span-container"><span className="TaskDisplay" >{newTask}</span></div>
                         <div className="button-container">
                             <button className="add"  onClick={()=>handleDelete(index)}>delete</button>
-                            <button className="add" style={{backgroundColor:'orangered'}} onClick={()=>moveTaskUp(index)}>⬆</button>
+                            <button className="add"  onClick={()=>moveTaskUp(index)}>⬆</button>
                             <button className="add" onClick={()=>MoveTaskDown(index)}>⬇</button>
-                            <button className="add" onClick={()=>handleEdit(task,index)}>Edit</button>
+                            <button className="add" onClick={()=>handleEdit(task,index)}>{isEditing.editing && isEditing.id==index ?  'update' :'edit'}</button>
                         </div>
                     </div>
                     

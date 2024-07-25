@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-
+import { useState } from "react";
 
 function Register(){
     const [email,setEmail] = useState('')
@@ -8,7 +8,7 @@ function Register(){
 
     // initialize the list
     const [users,setUsers] = useState(()=>{
-        const Myusers = localStorage.getItem('User')
+        const Myusers = localStorage.getItem('Users')
         if (Myusers){
             console.log('here')
             return JSON.parse(Myusers)
